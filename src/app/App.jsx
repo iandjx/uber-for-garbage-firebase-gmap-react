@@ -16,8 +16,8 @@ const App = () => {
       <Switch>
         {/* <PrivateRoute exact path='/' component={TrashRequest} /> */}
         {/* <PrivateRoute exact path='/request' component={DashboardComponent} /> */}
-        <Route exact path='/signin' component={Auth} />
-        <Route exact path='/signup' component={Auth} />
+        <Route exact path='/sign-in' component={Auth} />
+        <Route exact path='/register' component={Auth} />
         {/* <PrivateRoute exact path='/camera' component={ReactCamera} /> */}
         {/* <PrivateRoute
           exact
