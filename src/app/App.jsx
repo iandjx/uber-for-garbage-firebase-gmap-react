@@ -6,6 +6,7 @@ import Auth from '../pages/Auth'
 import TrashRequest from '../pages/TrashRequest'
 import PrivateRoute from '../common/components/PrivateComponent'
 import Camera from '../common/components/Camera'
+import Register from '../pages/Auth/Register'
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
         {/* <PrivateRoute exact path='/request' component={DashboardComponent} /> */}
         <Route exact path='/sign-in' component={Auth} />
         <Route exact path='/register' component={Auth} />
+        <Route exact path='/register' component={Register} />
         {/* <PrivateRoute exact path='/camera' component={ReactCamera} /> */}
         {/* <PrivateRoute
           exact

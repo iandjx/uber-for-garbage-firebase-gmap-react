@@ -3,6 +3,7 @@ import SignIn from './SignIn'
 import Register from './Register'
 import { Switch, Route } from 'react-router-dom'
 import Container from '@material-ui/core/Container'
+
 const Auth = () => {
   return (
     <Container>
