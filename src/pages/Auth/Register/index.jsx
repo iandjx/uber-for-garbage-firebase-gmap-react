@@ -31,12 +31,19 @@ const Register = props => {
   const { email = '' } = props.location.state.profile
   const { providerId } = props.location.state.auth.providerData[0]
 
-  const updateUserprofile = ({ fullName, email, phoneNumber, userType }) => {
+  const updateUserprofile = async ({
+    fullName,
+    email,
+    phoneNumber,
+    userType,
+    address
+  }) => {
     return firebase.updateProfile({
       fullName: fullName,
       email: email,
       phoneNumber: phoneNumber,
-      userType: userType
+      userType: userType,
+      address: address
     })
   }
   return (
@@ -45,10 +52,12 @@ const Register = props => {
         fullName: displayName,
         email: email,
         userType: '',
-        phoneNumber: phoneNumber
+        phoneNumber: phoneNumber,
+        address: ''
       }}
       validationSchema={Yup.object({
         fullName: Yup.string().required('Required'),
+        address: Yup.string().required('Required'),
         email: Yup.string()
           .email('Invalid email address')
           .required('Email address is required'),
@@ -61,11 +70,8 @@ const Register = props => {
           .required('Select a user category')
       })}
       onSubmit={(values, { setSubmitting }) => {
+        setSubmitting(false)
         updateUserprofile(values)
-        setTimeout(() => {
-          setSubmitting(false)
-          console.log(JSON.stringify(values, null, 2))
-        }, 500)
       }}
     >
       {({ submitForm, isSubmitting }) => (
@@ -77,6 +83,13 @@ const Register = props => {
             label='Full Name'
             disabled={providerId !== 'phone'}
           />
+          <Field
+            component={UpperCasingTextField}
+            name='address'
+            type='text'
+            label='Address'
+          />
+          <br />
           <Field
             component={UpperCasingTextField}
             name='email'
