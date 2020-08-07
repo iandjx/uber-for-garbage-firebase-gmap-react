@@ -1,17 +1,20 @@
 import React, { useEffect } from 'react'
-import { useFirebase, isLoaded, isEmpty } from 'react-redux-firebase'
-import { useSelector } from 'react-redux'
-import { useHistory } from 'react-router-dom'
+import { isEmpty, isLoaded, useFirebase } from 'react-redux-firebase'
+import { useHistory, useRouteMatch } from 'react-router-dom'
+
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
+import { useSelector } from 'react-redux'
 
 const SignIn = () => {
+  const { path, url } = useRouteMatch()
+
   const history = useHistory()
   const firebase = useFirebase()
   const { auth, profile } = useSelector(state => state.firebase)
 
   useEffect(() => {
     if (isEmpty(profile) === false && 'userType' in profile === false) {
-      history.push('/register', {
+      history.push('/auth/register', {
         auth: auth,
         profile: profile
       })

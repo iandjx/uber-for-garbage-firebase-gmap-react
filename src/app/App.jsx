@@ -1,77 +1,68 @@
 import React, { useEffect, useState } from 'react'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import Auth from '../pages/Auth'
-// import TrashRequestConfirmation from '../pages/disposerTrash/TrashRequestConfirmation'
-// import TrashRequestPending from '../pages/disposerTrash/TrashRequestPending'
-import TrashRequest from '../pages/TrashRequest'
-import PrivateRoute from '../common/components/PrivateComponent'
-import Camera from '../common/components/Camera'
-import Register from '../pages/Auth/Register'
-import Box from '@material-ui/core/Box'
 import {
-  Drawer,
-  List,
-  ListItem,
-  ListItemText,
-  Button,
-  ListItemIcon,
-  Container,
-  Typography
-} from '@material-ui/core'
-import Header from '../common/components/Header'
-import { makeStyles } from '@material-ui/core/styles'
+  Route,
+  BrowserRouter as Router,
+  Switch,
+  useHistory
+} from 'react-router-dom'
 
+import Auth from '../pages/Auth'
+import Box from '@material-ui/core/Box'
+import Camera from '../common/components/Camera'
+import Header from '../common/components/Header'
+import NewTrashRequest from '../pages/TrashRequest/NewTrashRequest'
+import PrivateRoute from '../common/components/PrivateComponent'
+import Register from '../pages/Auth/Register'
 import SideBar from '../common/components/SideBar'
-const useStyles = makeStyles(theme => ({
-  drawerPaper: { width: 'inherit' },
-  link: {
-    textDecoration: 'none',
-    color: theme.palette.text.primary
-  }
-}))
+import SignIn from '../pages/Auth/SignIn'
+import TrashRequest from '../pages/TrashRequest'
+import TrashRequestConfirmation from '../pages/TrashRequest/TrashRequestConfirmation'
+import { isEmpty } from 'react-redux-firebase'
+import { useSelector } from 'react-redux'
 
 const App = () => {
-  const classes = useStyles()
+  const history = useHistory()
+  const { auth } = useSelector(state => state.firebase)
+
   const [drawer, setDrawer] = useState(false)
+
+  useEffect(() => {
+    if (auth.uid === null) {
+      history.push('/sign-in')
+    }
+  }, [auth])
+
   return (
-    // if path is sign in or register do not show header and sidebar
-    // <Header></Header>
-    // <SideBar></SideBar>
     <Box display='flex'>
-      <Header setDrawer={setDrawer} drawer={drawer} />
-      <SideBar drawer={drawer} setDrawer={setDrawer} />
-      {/* <Drawer
-        style={{ width: '220px' }}
-        anchor='left'
-        open={drawer}
-        classes={{ paper: classes.drawerPaper }}
-        ModalProps={{ onBackdropClick: () => setDrawer(false) }}
-      >
-        <List>
-          <ListItem button>
-            <ListItemText primary='Home' />
-          </ListItem>
-
-          <ListItem button>
-            <ListItemText primary='About' />
-          </ListItem>
-        </List>
-      </Drawer>
-      */}
-
       <Router>
         <Switch>
-          {/* <PrivateRoute exact path='/' component={TrashRequest} /> */}
-          {/* <PrivateRoute exact path='/request' component={DashboardComponent} /> */}
-          <Route exact path='/sign-in' component={Auth} />
-          <Route exact path='/register' component={Auth} />
-          {/* <PrivateRoute exact path='/camera' component={ReactCamera} /> */}
-          {/* <PrivateRoute
-          exact
-         path='/confirm-request'
-          component={TrashRequestConfirmation}
-        />
-        <Route exact path='/pending-request' component={TrashRequestPending} /> */}
+          <Route
+            path=''
+            render={({ match: { url } }) => (
+              <>
+                <Header setDrawer={setDrawer} drawer={drawer} />
+                <SideBar drawer={drawer} setDrawer={setDrawer} />
+                <PrivateRoute
+                  path={`${url}new-request`}
+                  component={NewTrashRequest}
+                />
+                <PrivateRoute
+                  path={`${url}request-confirmation`}
+                  component={TrashRequestConfirmation}
+                />
+              </>
+            )}
+          />
+
+          <Route
+            path='/auth'
+            render={({ match: { url } }) => (
+              <>
+                <Route path={`${url}/sign-in`} component={SignIn} />
+                <Route path={`${url}/register`} component={Register} />
+              </>
+            )}
+          />
         </Switch>
       </Router>
     </Box>

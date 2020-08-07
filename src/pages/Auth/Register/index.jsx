@@ -1,11 +1,17 @@
-import * as React from 'react'
-import { Formik, Form, Field } from 'formik'
-import { Button, LinearProgress, MenuItem } from '@material-ui/core'
-import { TextField, fieldToTextField } from 'formik-material-ui'
 import * as Yup from 'yup'
-import MuiTextField from '@material-ui/core/TextField'
+
+import { Button, LinearProgress, MenuItem } from '@material-ui/core'
+import { Field, Form, Formik } from 'formik'
+import React, { useEffect } from 'react'
+import { TextField, fieldToTextField } from 'formik-material-ui'
+import { isEmpty, isLoaded } from 'react-redux-firebase'
+import { useHistory, useRouteMatch } from 'react-router-dom'
+
 import Box from '@material-ui/core/Box'
+import MuiTextField from '@material-ui/core/TextField'
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 import { useFirebase } from 'react-redux-firebase'
+import { useSelector } from 'react-redux'
 
 const phoneRegExp = /^\+[1-9]{1}[0-9]{3,14}$/
 
@@ -26,10 +32,17 @@ function UpperCasingTextField (props) {
 
 const Register = props => {
   const firebase = useFirebase()
-
+  const history = useHistory()
+  const { auth, profile } = useSelector(state => state.firebase)
   const { displayName = '', phoneNumber = '+63' } = props.location.state.auth
   const { email = '' } = props.location.state.profile
   const { providerId } = props.location.state.auth.providerData[0]
+
+  useEffect(() => {
+    if (isEmpty(profile) === false && 'userType' in profile === true) {
+      history.push('/')
+    }
+  }, [profile])
 
   const updateUserprofile = async ({
     fullName,
