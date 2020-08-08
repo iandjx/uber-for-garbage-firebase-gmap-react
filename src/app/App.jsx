@@ -9,6 +9,7 @@ import {
 import Auth from '../pages/Auth'
 import Box from '@material-ui/core/Box'
 import Camera from '../common/components/Camera'
+import { Grid } from '@material-ui/core'
 import Header from '../common/components/Header'
 import NewTrashRequest from '../pages/TrashRequest/NewTrashRequest'
 import PrivateRoute from '../common/components/PrivateComponent'
@@ -40,16 +41,22 @@ const App = () => {
             path=''
             render={({ match: { url } }) => (
               <>
-                <Header setDrawer={setDrawer} drawer={drawer} />
-                <SideBar drawer={drawer} setDrawer={setDrawer} />
-                <PrivateRoute
-                  path={`${url}new-request`}
-                  component={NewTrashRequest}
-                />
-                <PrivateRoute
-                  path={`${url}request-confirmation`}
-                  component={TrashRequestConfirmation}
-                />
+                <Grid container justify='center' alignItems='center'>
+                  <SideBar drawer={drawer} setDrawer={setDrawer} />
+                  <Grid item xs={12}>
+                    <Header setDrawer={setDrawer} drawer={drawer} />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <PrivateRoute
+                      path={`${url}new-request`}
+                      component={NewTrashRequest}
+                    />
+                    <PrivateRoute
+                      path={`${url}request-confirmation`}
+                      component={TrashRequestConfirmation}
+                    />
+                  </Grid>
+                </Grid>
               </>
             )}
           />
