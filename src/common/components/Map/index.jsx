@@ -1,8 +1,8 @@
-import React from 'react'
+import './map.css'
+
 import GoogleMapReact from 'google-map-react'
 import LocationOnIcon from '@material-ui/icons/LocationOn'
-
-import './map.css'
+import React from 'react'
 
 const LocationPin = ({ lat, lng, text }) => (
   <div className='pin'>
@@ -17,7 +17,7 @@ const Map = ({ location, zoomLevel }) => (
   <div className='map'>
     <div className='google-map'>
       <GoogleMapReact
-        bootstrapURLKeys={{ key: key }}
+        bootstrapURLKeys={{ key: fakeKey }}
         defaultCenter={location}
         defaultZoom={zoomLevel}
         // distanceToMouse={() => {}}

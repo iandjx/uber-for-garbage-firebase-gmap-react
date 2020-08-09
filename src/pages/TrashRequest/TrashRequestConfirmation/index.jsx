@@ -11,18 +11,12 @@ const TrashRequestConfirmation = props => {
   const firestore = useFirestore()
   const { uid } = useSelector(state => state.firebase.auth)
 
-  useFirestoreConnect({
-    collection: `users/${uid}/requests`,
-    storeAs: 'requests'
-  })
-
-  const requests = useSelector(state => state.firestore.data.requests)
-
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
 
   const dispatch = useDispatch()
   const history = useHistory()
+
   const {
     lat,
     lng,
@@ -31,7 +25,8 @@ const TrashRequestConfirmation = props => {
     weight,
     requesterId,
     createdAt,
-    photoUrl
+    photoUrl,
+    status
   } = props.location.state
 
   const handleCOnfirm = async () => {
@@ -42,8 +37,9 @@ const TrashRequestConfirmation = props => {
       lat: lat,
       lng: lng,
       requesterId: requesterId,
-      createdAt: createdAt
-      // photoUrl: photoUrl
+      createdAt: createdAt,
+      photoUrl: photoUrl,
+      status: status
     }
     const response = await firestore
       .collection('users')

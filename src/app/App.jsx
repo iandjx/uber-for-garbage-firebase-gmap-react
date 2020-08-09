@@ -6,11 +6,13 @@ import {
   useHistory
 } from 'react-router-dom'
 
+import ActiveTrashRequest from '../pages/TrashRequest/ActiveTrashRequest'
 import Auth from '../pages/Auth'
 import Box from '@material-ui/core/Box'
 import Camera from '../common/components/Camera'
 import { Grid } from '@material-ui/core'
 import Header from '../common/components/Header'
+import ImagePreview from '../common/components/Camera/ImagePreview'
 import NewTrashRequest from '../pages/TrashRequest/NewTrashRequest'
 import PrivateRoute from '../common/components/PrivateComponent'
 import Register from '../pages/Auth/Register'
@@ -29,7 +31,7 @@ const App = () => {
 
   useEffect(() => {
     if (auth.uid === null) {
-      history.push('/sign-in')
+      history.push('/auth/sign-in')
     }
   }, [auth])
 
@@ -38,7 +40,7 @@ const App = () => {
       <Router>
         <Switch>
           <Route
-            path=''
+            path='/disposer'
             render={({ match: { url } }) => (
               <>
                 <Grid container justify='center' alignItems='center'>
@@ -48,19 +50,27 @@ const App = () => {
                   </Grid>
                   <Grid item xs={12}>
                     <PrivateRoute
-                      path={`${url}new-request`}
+                      path={`${url}/new-request`}
                       component={NewTrashRequest}
                     />
                     <PrivateRoute
-                      path={`${url}request-confirmation`}
+                      path={`${url}/request-confirmation`}
                       component={TrashRequestConfirmation}
+                    />
+                    <PrivateRoute
+                      path={`${url}/active-request`}
+                      component={ActiveTrashRequest}
+                    />
+                    <PrivateRoute path={`${url}camera`} component={Camera} />
+                    <PrivateRoute
+                      path={`${url}/image-preview`}
+                      component={ImagePreview}
                     />
                   </Grid>
                 </Grid>
               </>
             )}
           />
-
           <Route
             path='/auth'
             render={({ match: { url } }) => (
