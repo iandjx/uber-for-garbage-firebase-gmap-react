@@ -9,12 +9,10 @@ import { useHistory } from 'react-router-dom'
 const TrashRequestConfirmation = props => {
   const [show, setShow] = useState(false)
   const firestore = useFirestore()
-  const { uid } = useSelector(state => state.firebase.auth)
 
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
 
-  const dispatch = useDispatch()
   const history = useHistory()
 
   const {
@@ -41,11 +39,7 @@ const TrashRequestConfirmation = props => {
       photoUrl: photoUrl,
       status: status
     }
-    const response = await firestore
-      .collection('users')
-      .doc(uid)
-      .collection('requests')
-      .add(newTrashRequest)
+    const response = await firestore.collection('requests').add(newTrashRequest)
 
     await response.update({
       requestId: response.id

@@ -2,11 +2,10 @@ import * as Yup from 'yup'
 
 import { Button, LinearProgress, MenuItem } from '@material-ui/core'
 import { Field, Form, Formik } from 'formik'
+import React, { useEffect } from 'react'
 
 import { Client } from '@googlemaps/google-maps-services-js'
-import React from 'react'
 import { TextField } from 'formik-material-ui'
-import { useEffect } from 'react'
 import { useFirestoreConnect } from 'react-redux-firebase'
 import { useHistory } from 'react-router-dom'
 import { useSelector } from 'react-redux'
@@ -20,8 +19,11 @@ const NewTrashRequest = () => {
   const { uid } = useSelector(state => state.firebase.auth)
 
   useFirestoreConnect({
-    collection: `users/${uid}/requests`,
-    where: ['status', 'in', ['pending', 'active']],
+    collection: 'requests',
+    where: [
+      ['status', 'in', ['pending', 'active']],
+      ['requesterId', '==', uid || '']
+    ],
     storeAs: 'requests'
   })
 
@@ -63,7 +65,10 @@ const NewTrashRequest = () => {
 
   return (
     <>
-      <Button disabled={photoUrl} onClick={() => history.push('/camera')}>
+      <Button
+        disabled={photoUrl}
+        onClick={() => history.push('/disposer/camera')}
+      >
         Photo
       </Button>
       <Formik

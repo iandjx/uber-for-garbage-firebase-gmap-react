@@ -20,6 +20,7 @@ import SideBar from '../common/components/SideBar'
 import SignIn from '../pages/Auth/SignIn'
 import TrashRequest from '../pages/TrashRequest'
 import TrashRequestConfirmation from '../pages/TrashRequest/TrashRequestConfirmation'
+import TrashRequestList from '../pages/Collector/TrashRequestList'
 import { isEmpty } from 'react-redux-firebase'
 import { useSelector } from 'react-redux'
 
@@ -61,7 +62,7 @@ const App = () => {
                       path={`${url}/active-request`}
                       component={ActiveTrashRequest}
                     />
-                    <PrivateRoute path={`${url}camera`} component={Camera} />
+                    <PrivateRoute path={`${url}/camera`} component={Camera} />
                     <PrivateRoute
                       path={`${url}/image-preview`}
                       component={ImagePreview}
@@ -80,6 +81,7 @@ const App = () => {
               </>
             )}
           />
+          <Route path='/collector' component={TrashRequestList} />
         </Switch>
       </Router>
     </Box>
