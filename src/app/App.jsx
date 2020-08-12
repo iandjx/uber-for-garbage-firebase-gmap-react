@@ -26,7 +26,7 @@ import { useSelector } from 'react-redux'
 
 const App = () => {
   const history = useHistory()
-  const { auth } = useSelector(state => state.firebase)
+  const { auth, profile } = useSelector(state => state.firebase)
 
   const [drawer, setDrawer] = useState(false)
 
@@ -34,7 +34,11 @@ const App = () => {
     if (auth.uid === null) {
       history.push('/auth/sign-in')
     }
-  }, [auth])
+
+    // if (profile.userType === 'collector') {
+    //   history.push('/collector/request-list', { uid: auth.uid })
+    // }
+  }, [auth, profile])
 
   return (
     <Box display='flex'>
@@ -81,7 +85,17 @@ const App = () => {
               </>
             )}
           />
-          <Route path='/collector' component={TrashRequestList} />
+          <Route
+            path='/collector'
+            render={({ match: { url } }) => (
+              <>
+                <PrivateRoute
+                  path={`${url}/request-list`}
+                  component={TrashRequestList}
+                />
+              </>
+            )}
+          />
         </Switch>
       </Router>
     </Box>
