@@ -9,8 +9,8 @@ import { useSelector } from 'react-redux'
 const watch = true
 
 const TrashRequestList = props => {
-  const { uid } = props.location.state
-  // const { uid } = useSelector(state => state.firebase.auth)
+  // const { uid } = props.location.state
+  const { uid } = useSelector(state => state.firebase.auth)
   const { latitude, longitude } = usePosition(watch)
 
   useFirestoreConnect({
@@ -23,7 +23,7 @@ const TrashRequestList = props => {
     collection: 'requests',
     where: [
       ['status', '==', 'active'],
-      ['collectorId', '==', uid]
+      ['collectorId', '==', uid || null]
     ],
     storeAs: 'activeRequests'
   })

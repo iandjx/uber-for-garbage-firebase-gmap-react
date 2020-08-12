@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import { Button, Grid } from '@material-ui/core'
 import {
+  Outlet,
   Route,
   BrowserRouter as Router,
-  Switch,
-  useHistory
+  Routes,
+  useNavigate
 } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
 
 import ActiveTrashRequest from '../pages/TrashRequest/ActiveTrashRequest'
 import Auth from '../pages/Auth'
 import Box from '@material-ui/core/Box'
 import Camera from '../common/components/Camera'
-import { Grid } from '@material-ui/core'
 import Header from '../common/components/Header'
 import ImagePreview from '../common/components/Camera/ImagePreview'
 import NewTrashRequest from '../pages/TrashRequest/NewTrashRequest'
@@ -25,79 +26,57 @@ import { isEmpty } from 'react-redux-firebase'
 import { useSelector } from 'react-redux'
 
 const App = () => {
-  const history = useHistory()
+  const navigate = useNavigate()
   const { auth, profile } = useSelector(state => state.firebase)
 
   const [drawer, setDrawer] = useState(false)
 
   useEffect(() => {
-    if (auth.uid === null) {
-      history.push('/auth/sign-in')
+    if (isEmpty(auth)) {
+      navigate('/signin')
     }
 
-    // if (profile.userType === 'collector') {
-    //   history.push('/collector/request-list', { uid: auth.uid })
-    // }
+    if (profile.userType === 'collector') {
+      navigate('/collector', { uid: auth.uid })
+    }
   }, [auth, profile])
+
+  function DashBoard () {
+    return (
+      <>
+        <Grid container justify='center' alignItems='center'>
+          <SideBar drawer={drawer} setDrawer={setDrawer} />
+          <Grid item xs={12}>
+            <Header setDrawer={setDrawer} drawer={drawer} />
+          </Grid>
+          <Grid item xs={12}>
+            <Outlet />
+          </Grid>
+        </Grid>
+      </>
+    )
+  }
 
   return (
     <Box display='flex'>
-      <Router>
-        <Switch>
-          <Route
-            path='/disposer'
-            render={({ match: { url } }) => (
-              <>
-                <Grid container justify='center' alignItems='center'>
-                  <SideBar drawer={drawer} setDrawer={setDrawer} />
-                  <Grid item xs={12}>
-                    <Header setDrawer={setDrawer} drawer={drawer} />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <PrivateRoute
-                      path={`${url}/new-request`}
-                      component={NewTrashRequest}
-                    />
-                    <PrivateRoute
-                      path={`${url}/request-confirmation`}
-                      component={TrashRequestConfirmation}
-                    />
-                    <PrivateRoute
-                      path={`${url}/active-request`}
-                      component={ActiveTrashRequest}
-                    />
-                    <PrivateRoute path={`${url}/camera`} component={Camera} />
-                    <PrivateRoute
-                      path={`${url}/image-preview`}
-                      component={ImagePreview}
-                    />
-                  </Grid>
-                </Grid>
-              </>
-            )}
+      <Button onClick={() => navigate('/collector')}>signin</Button>
+      <Routes>
+        <Route path='/disposer' element={<DashBoard />}>
+          <PrivateRoute path='/new-request' element={<NewTrashRequest />} />
+          <PrivateRoute
+            path='request-confirmation'
+            element={<TrashRequestConfirmation />}
           />
-          <Route
-            path='/auth'
-            render={({ match: { url } }) => (
-              <>
-                <Route path={`${url}/sign-in`} component={SignIn} />
-                <Route path={`${url}/register`} component={Register} />
-              </>
-            )}
+          <PrivateRoute
+            path='/active-request'
+            element={<ActiveTrashRequest />}
           />
-          <Route
-            path='/collector'
-            render={({ match: { url } }) => (
-              <>
-                <PrivateRoute
-                  path={`${url}/request-list`}
-                  component={TrashRequestList}
-                />
-              </>
-            )}
-          />
-        </Switch>
-      </Router>
+          <PrivateRoute path='/camera' element={<Camera />} />
+          <PrivateRoute path='/image-preview' element={<ImagePreview />} />
+        </Route>
+        <Route path='/signin' element={<SignIn />} />
+        <Route path='/collector' element={<TrashRequestList />} />
+      </Routes>
     </Box>
   )
 }

@@ -3,11 +3,8 @@ import { Button, Grid } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
 import React from 'react'
 import routes from './routes'
-import { useRouteMatch } from 'react-router-dom'
 
 const Header = ({ drawer, setDrawer }) => {
-  const { path, url } = useRouteMatch()
-
   const isCurrentPath = route => route.path === window.location.pathname
   const currentPath = routes.find(isCurrentPath)
 

@@ -6,11 +6,11 @@ import React, { useEffect, useState } from 'react'
 import Collector from './Collector'
 import Disposer from './Disposer'
 import { isEmpty } from 'react-redux-firebase'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
 const Register = props => {
-  const history = useHistory()
+  const navigate = useNavigate()
   const { profile } = useSelector(state => state.firebase)
   const { displayName = '', phoneNumber = '+63' } = props.location.state.auth
   const { email = '' } = props.location.state.profile
@@ -20,7 +20,7 @@ const Register = props => {
 
   useEffect(() => {
     if (isEmpty(profile) === false && 'userType' in profile === true) {
-      history.push('/')
+      navigate('/')
     }
   }, [profile])
 
