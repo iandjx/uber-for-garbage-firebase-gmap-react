@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Card,
+  CardActionArea,
   CardActions,
   CardContent,
   Modal,
@@ -9,6 +10,7 @@ import {
 } from '@material-ui/core'
 import { useFirestore, useFirestoreConnect } from 'react-redux-firebase'
 
+import Map from '../../../../common/components/Map'
 import React from 'react'
 import haversine from 'haversine'
 import usePosition from 'use-position'
@@ -30,6 +32,7 @@ const TrashRequestItem = ({
   const [open, setOpen] = useState(false)
   const firestore = useFirestore()
   const { uid } = useSelector(state => state.firebase.auth)
+  const [mapOpen, setMapOpen] = useState(false)
 
   useFirestoreConnect({
     collection: 'users',
@@ -39,14 +42,9 @@ const TrashRequestItem = ({
 
   const { requester } = useSelector(state => state.firestore.data)
 
-  const handleOpen = () => {
-    setOpen(true)
+  const toggleMap = () => {
+    setMapOpen(!mapOpen)
   }
-
-  const handleClose = () => {
-    setOpen(false)
-  }
-
   const acceptRequest = () => {
     firestore
       .collection('requests')
@@ -70,18 +68,30 @@ const TrashRequestItem = ({
   return (
     <>
       <Card>
-        <CardContent>
-          <Typography>{requester && requester.fullName}</Typography>
-          <Typography>{location}</Typography>
-          <Typography>{garbageType}</Typography>
-          <Typography>{weight}</Typography>
-        </CardContent>
+        <CardActionArea onClick={toggleMap}>
+          {mapOpen && (
+            <Map
+              location={{
+                address: 'as',
+                lat: 14.549613,
+                lng: 121.041158
+              }}
+              zoomLevel={17}
+            />
+          )}
+          <CardContent>
+            <Typography>{requester && requester.fullName}</Typography>
+            <Typography>{location}</Typography>
+            <Typography>{garbageType}</Typography>
+            <Typography>{weight}</Typography>
+          </CardContent>
+        </CardActionArea>
         <CardActions>
           <Button
             size='small'
             color='primary'
             disabled={photoUrl === ''}
-            onClick={handleOpen}
+            // onClick={handleOpen}
           >
             View Photo
           </Button>
@@ -98,7 +108,7 @@ const TrashRequestItem = ({
       </Card>
       <Modal
         open={open}
-        onClose={handleClose}
+        // onClose={handleClose}
         aria-labelledby='simple-modal-title'
         aria-describedby='simple-modal-description'
       >

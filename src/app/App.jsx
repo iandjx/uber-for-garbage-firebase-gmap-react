@@ -7,11 +7,13 @@ import {
   useNavigate
 } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
+import { isEmpty, isLoaded } from 'react-redux-firebase'
 
 import ActiveTrashRequest from '../pages/TrashRequest/ActiveTrashRequest'
 import Auth from '../pages/Auth'
 import Box from '@material-ui/core/Box'
 import Camera from '../common/components/Camera'
+import Dashboard from '../pages/Dashboard'
 import Header from '../common/components/Header'
 import ImagePreview from '../common/components/Camera/ImagePreview'
 import NewTrashRequest from '../pages/TrashRequest/NewTrashRequest'
@@ -22,46 +24,28 @@ import SignIn from '../pages/Auth/SignIn'
 import TrashRequest from '../pages/TrashRequest'
 import TrashRequestConfirmation from '../pages/TrashRequest/TrashRequestConfirmation'
 import TrashRequestList from '../pages/Collector/TrashRequestList'
-import { isEmpty } from 'react-redux-firebase'
 import { useSelector } from 'react-redux'
 
 const App = () => {
   const navigate = useNavigate()
   const { auth, profile } = useSelector(state => state.firebase)
 
-  const [drawer, setDrawer] = useState(false)
-
   useEffect(() => {
-    if (isEmpty(auth)) {
+    if (isEmpty(auth) && isLoaded(auth)) {
       navigate('/signin')
     }
-
-    if (profile.userType === 'collector') {
+    if (profile.userType === 'collector' && isLoaded(profile)) {
       navigate('/collector', { uid: auth.uid })
+    }
+    if (profile.userType === 'household' && isLoaded(profile)) {
+      navigate('/disposer/new-request')
     }
   }, [auth, profile])
 
-  function DashBoard () {
-    return (
-      <>
-        <Grid container justify='center' alignItems='center'>
-          <SideBar drawer={drawer} setDrawer={setDrawer} />
-          <Grid item xs={12}>
-            <Header setDrawer={setDrawer} drawer={drawer} />
-          </Grid>
-          <Grid item xs={12}>
-            <Outlet />
-          </Grid>
-        </Grid>
-      </>
-    )
-  }
-
   return (
     <Box display='flex'>
-      <Button onClick={() => navigate('/collector')}>signin</Button>
       <Routes>
-        <Route path='/disposer' element={<DashBoard />}>
+        <Route path='/disposer' element={<Dashboard />}>
           <PrivateRoute path='/new-request' element={<NewTrashRequest />} />
           <PrivateRoute
             path='request-confirmation'
