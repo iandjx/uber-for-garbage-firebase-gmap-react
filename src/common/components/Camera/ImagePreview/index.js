@@ -6,11 +6,11 @@ import PropTypes from 'prop-types'
 import { savePhoto } from '../cameraSlice'
 import { storage } from '../../../../config/firebaseConfig'
 import { useDispatch } from 'react-redux'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 
 export const ImagePreview = ({ dataUri, isFullscreen, reTakePhoto }) => {
-  const history = useHistory()
+  const navigate = useNavigate()
   const storageRef = storage.ref()
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(false)
@@ -23,7 +23,7 @@ export const ImagePreview = ({ dataUri, isFullscreen, reTakePhoto }) => {
     const url = await uploadedImage.ref.getDownloadURL()
     setLoading(false)
     dispatch(savePhoto(url))
-    history.goBack()
+    navigate(-1)
   }
 
   let classNameFullscreen = isFullscreen ? 'demo-image-preview-fullscreen' : ''

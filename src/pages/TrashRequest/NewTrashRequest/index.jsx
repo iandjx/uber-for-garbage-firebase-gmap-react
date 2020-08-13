@@ -2,26 +2,28 @@ import * as Yup from 'yup'
 
 import { Button, LinearProgress, MenuItem } from '@material-ui/core'
 import { Field, Form, Formik } from 'formik'
+import React, { useEffect } from 'react'
 
 import { Client } from '@googlemaps/google-maps-services-js'
-import React from 'react'
 import { TextField } from 'formik-material-ui'
-import { useEffect } from 'react'
 import { useFirestoreConnect } from 'react-redux-firebase'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
 const mapClient = new Client({})
 
 const NewTrashRequest = () => {
-  const history = useHistory()
+  const navigate = useNavigate()
   const { auth } = useSelector(state => state.firebase)
   const { photoUrl } = useSelector(state => state.camera)
   const { uid } = useSelector(state => state.firebase.auth)
 
   useFirestoreConnect({
-    collection: `users/${uid}/requests`,
-    where: ['status', 'in', ['pending', 'active']],
+    collection: 'requests',
+    where: [
+      ['status', 'in', ['pending', 'active']],
+      ['requesterId', '==', uid || '']
+    ],
     storeAs: 'requests'
   })
 
@@ -50,20 +52,20 @@ const NewTrashRequest = () => {
       status: 'pending'
     }
     console.log(newTrashRequest)
-    history.push('/disposer/request-confirmation', { ...newTrashRequest })
+    navigate('/disposer/request-confirmation', { ...newTrashRequest })
   }
 
   useEffect(() => {
     if (requests) {
       if (Object.keys(requests).length > 0) {
-        history.push('/disposer/active-request', requests)
+        navigate('/disposer/active-request', requests)
       }
     }
   }, [requests])
 
   return (
     <>
-      <Button disabled={photoUrl} onClick={() => history.push('/camera')}>
+      <Button disabled={photoUrl} onClick={() => navigate('/disposer/camera')}>
         Photo
       </Button>
       <Formik

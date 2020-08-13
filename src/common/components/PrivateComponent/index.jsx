@@ -1,6 +1,7 @@
+import { Navigate, Route } from 'react-router-dom'
+import { isEmpty, isLoaded } from 'react-redux-firebase'
+
 import React from 'react'
-import { Route, Redirect } from 'react-router-dom'
-import { isLoaded, isEmpty } from 'react-redux-firebase'
 import { useSelector } from 'react-redux'
 
 const PrivateRoute = ({ children, ...remainingProps }) => {
@@ -12,13 +13,14 @@ const PrivateRoute = ({ children, ...remainingProps }) => {
         isLoaded(auth) && !isEmpty(auth) ? (
           children
         ) : (
-          <Redirect
+          <Navigate
             to={{
-              pathname: '/sign-in',
+              pathname: '/auth/sign-in',
               state: { from: location }
             }}
           />
-        )}
+        )
+      }
     />
   )
 }

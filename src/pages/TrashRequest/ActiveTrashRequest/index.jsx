@@ -9,8 +9,11 @@ const ActiveTrashRequest = props => {
   const { uid } = useSelector(state => state.firebase.auth)
   const [currentRequest, setCurrentRequest] = useState({})
   useFirestoreConnect({
-    collection: `users/${uid}/requests`,
-    where: ['status', 'in', ['pending', 'active']],
+    collection: 'requests',
+    where: [
+      ['status', 'in', ['pending', 'active']],
+      ['requesterId', '==', uid || '']
+    ],
     storeAs: 'requests'
   })
   const { requests } = useSelector(state => state.firestore.data)

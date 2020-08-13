@@ -4,18 +4,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useFirestore, useFirestoreConnect } from 'react-redux-firebase'
 
 import Map from '../../../common/components/Map'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const TrashRequestConfirmation = props => {
   const [show, setShow] = useState(false)
   const firestore = useFirestore()
-  const { uid } = useSelector(state => state.firebase.auth)
 
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
 
-  const dispatch = useDispatch()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const {
     lat,
@@ -41,11 +39,7 @@ const TrashRequestConfirmation = props => {
       photoUrl: photoUrl,
       status: status
     }
-    const response = await firestore
-      .collection('users')
-      .doc(uid)
-      .collection('requests')
-      .add(newTrashRequest)
+    const response = await firestore.collection('requests').add(newTrashRequest)
 
     await response.update({
       requestId: response.id
@@ -79,7 +73,7 @@ const TrashRequestConfirmation = props => {
         <Button variant='outlined' onClick={handleCOnfirm}>
           Confirm
         </Button>
-        <Button variant='outlined' onClick={() => history.goBack()}>
+        <Button variant='outlined' onClick={() => navigate(-1)}>
           Cancel
         </Button>
       </Box>
