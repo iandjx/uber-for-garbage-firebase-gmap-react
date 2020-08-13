@@ -10,12 +10,13 @@ import {
 } from '@material-ui/core'
 import { useFirestore, useFirestoreConnect } from 'react-redux-firebase'
 
-import Map from '../../../../common/components/Map'
+import Map from '../../../../common/components/GoogleMap'
 import React from 'react'
 import haversine from 'haversine'
 import usePosition from 'use-position'
 import { useSelector } from 'react-redux'
 import { useState } from 'react'
+import { withScriptjs } from 'react-google-maps'
 
 const TrashRequestItem = ({
   createdAt,
@@ -33,7 +34,7 @@ const TrashRequestItem = ({
   const firestore = useFirestore()
   const { uid } = useSelector(state => state.firebase.auth)
   const [mapOpen, setMapOpen] = useState(false)
-
+  const MapLoader = withScriptjs(Map)
   useFirestoreConnect({
     collection: 'users',
     doc: requesterId,
@@ -70,13 +71,14 @@ const TrashRequestItem = ({
       <Card>
         <CardActionArea onClick={toggleMap}>
           {mapOpen && (
-            <Map
-              location={{
-                address: 'as',
-                lat: 14.549613,
-                lng: 121.041158
-              }}
-              zoomLevel={17}
+            <MapLoader
+              googleMapURL='https://maps.googleapis.com/maps/api/js?key=AIzaSyCgByDvfp019eGSE-aUPBAbePU7e0MI0WU'
+              loadingElement={<div style={{ height: `100%` }} />}
+              origina={{ lat: 40.756795, lng: -73.954298 }}
+              destinationa={{ lat: 41.756795, lng: -78.954298 }}
+              isMarkerOnly={false}
+              defaultLocation={{ lat: 40.756795, lng: -73.954298 }}
+              userLocation={{ lat: 40.756795, lng: -73.954298 }}
             />
           )}
           <CardContent>

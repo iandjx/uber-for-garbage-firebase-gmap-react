@@ -21,12 +21,13 @@ import PrivateRoute from '../common/components/PrivateComponent'
 import Register from '../pages/Auth/Register'
 import SideBar from '../common/components/SideBar'
 import SignIn from '../pages/Auth/SignIn'
+import Test from '../pages/Test'
 import TrashRequest from '../pages/TrashRequest'
 import TrashRequestConfirmation from '../pages/TrashRequest/TrashRequestConfirmation'
 import TrashRequestList from '../pages/Collector/TrashRequestList'
 import { useSelector } from 'react-redux'
 
-const App = () => {
+const App = props => {
   const navigate = useNavigate()
   const { auth, profile } = useSelector(state => state.firebase)
 
@@ -60,6 +61,7 @@ const App = () => {
         </Route>
         <Route path='/signin' element={<SignIn />} />
         <Route path='/collector' element={<TrashRequestList />} />
+        <Route path='/test' element={<Test />} />
       </Routes>
     </Box>
   )
