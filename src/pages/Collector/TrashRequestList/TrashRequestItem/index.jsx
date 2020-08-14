@@ -10,10 +10,12 @@ import {
 } from '@material-ui/core'
 import { useFirestore, useFirestoreConnect } from 'react-redux-firebase'
 
+import Alert from '@material-ui/lab/Alert'
 import Map from '../../../../common/components/GoogleMap'
 import React from 'react'
 import haversine from 'haversine'
-import usePosition from 'use-position'
+import { useEffect } from 'react'
+import { usePosition } from 'use-position'
 import { useSelector } from 'react-redux'
 import { useState } from 'react'
 import { withScriptjs } from 'react-google-maps'
@@ -30,6 +32,21 @@ const TrashRequestItem = ({
   weight,
   requestId
 }) => {
+  const watch = true
+  const { latitude, longitude } = usePosition(true)
+  const [latCoord, setLatCoord] = useState(null)
+  const [lngCoord, setLngCoord] = useState(null)
+  const [activateButton, setActivateButton] = useState(false)
+  useEffect(() => {
+    if (latitude !== undefined) {
+      setLatCoord(latitude)
+      setLngCoord(longitude)
+      setActivateButton(true)
+    } else {
+      setActivateButton(false)
+    }
+  }, [latitude, longitude])
+
   const [open, setOpen] = useState(false)
   const firestore = useFirestore()
   const { uid } = useSelector(state => state.firebase.auth)
@@ -69,18 +86,36 @@ const TrashRequestItem = ({
   return (
     <>
       <Card>
+        {latCoord === undefined ||
+          (latCoord === null && (
+            <Alert severity='warning'>Cannot access GPS coordinates</Alert>
+          ))}
+        {mapOpen && status === 'pending' && latCoord && lngCoord && (
+          <MapLoader
+            googleMapURL='https://maps.googleapis.com/maps/api/js?key=AIzaSyCgByDvfp019eGSE-aUPBAbePU7e0MI0WU'
+            loadingElement={<div style={{ height: `100%` }} />}
+            // origina={{ lat: 40.756795, lng: -73.954298 }}
+            // destinationa={{ lat: 41.756795, lng: -78.954298 }}
+            isMarkerOnly={true}
+            defaultLocation={{ lat: latCoord, lng: lngCoord }}
+            userLocation={{ lat: latCoord, lng: lngCoord }}
+            markerLocation={{ lat: lat, lng: lng }}
+          />
+        )}
+
+        {mapOpen && status === 'active' && latCoord && lngCoord && (
+          <MapLoader
+            googleMapURL='https://maps.googleapis.com/maps/api/js?key=AIzaSyCgByDvfp019eGSE-aUPBAbePU7e0MI0WU'
+            loadingElement={<div style={{ height: `100%` }} />}
+            origina={{ lat: latCoord, lng: lngCoord }}
+            destinationa={{ lat: lat, lng: lng }}
+            isMarkerOnly={false}
+            defaultLocation={{ lat: latCoord, lng: lngCoord }}
+            userLocation={{ lat: latCoord, lng: lngCoord }}
+            // markerLocation={{ lat: lat, lng: lng }}
+          />
+        )}
         <CardActionArea onClick={toggleMap}>
-          {mapOpen && (
-            <MapLoader
-              googleMapURL='https://maps.googleapis.com/maps/api/js?key=AIzaSyCgByDvfp019eGSE-aUPBAbePU7e0MI0WU'
-              loadingElement={<div style={{ height: `100%` }} />}
-              origina={{ lat: 40.756795, lng: -73.954298 }}
-              destinationa={{ lat: 41.756795, lng: -78.954298 }}
-              isMarkerOnly={false}
-              defaultLocation={{ lat: 40.756795, lng: -73.954298 }}
-              userLocation={{ lat: 40.756795, lng: -73.954298 }}
-            />
-          )}
           <CardContent>
             <Typography>{requester && requester.fullName}</Typography>
             <Typography>{location}</Typography>
@@ -98,7 +133,12 @@ const TrashRequestItem = ({
             View Photo
           </Button>
           {status === 'pending' ? (
-            <Button size='small' color='primary' onClick={acceptRequest}>
+            <Button
+              size='small'
+              color='primary'
+              onClick={acceptRequest}
+              disabled={!activateButton}
+            >
               Accept
             </Button>
           ) : (
