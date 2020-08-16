@@ -15,6 +15,7 @@ import Map from '../../../../common/components/GoogleMap'
 import React from 'react'
 import haversine from 'haversine'
 import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { usePosition } from 'use-position'
 import { useSelector } from 'react-redux'
 import { useState } from 'react'
@@ -32,8 +33,9 @@ const TrashRequestItem = ({
   weight,
   requestId
 }) => {
+  const navigate = useNavigate()
   const watch = true
-  const { latitude, longitude } = usePosition(true)
+  const { latitude, longitude } = usePosition(watch)
   const [latCoord, setLatCoord] = useState(null)
   const [lngCoord, setLngCoord] = useState(null)
   const [activateButton, setActivateButton] = useState(false)
@@ -63,8 +65,8 @@ const TrashRequestItem = ({
   const toggleMap = () => {
     setMapOpen(!mapOpen)
   }
-  const acceptRequest = () => {
-    firestore
+  const acceptRequest = async () => {
+    await firestore
       .collection('requests')
       .doc(requestId)
       .update({
@@ -73,14 +75,30 @@ const TrashRequestItem = ({
       })
   }
 
-  const cancelRequest = () => {
-    firestore
+  const cancelRequest = async () => {
+    await firestore
       .collection('requests')
       .doc(requestId)
       .update({
         status: 'pending',
         collectorId: ''
       })
+  }
+
+  const startTrip = async () => {
+    await firestore
+      .collection('requests')
+      .doc(requestId)
+      .update({
+        status: 'onRoute'
+      })
+    navigate('/collector/on-route', {
+      state: {
+        requestId: requestId,
+        lat: lat,
+        lng: lng
+      }
+    })
   }
 
   return (
@@ -142,9 +160,14 @@ const TrashRequestItem = ({
               Accept
             </Button>
           ) : (
-            <Button size='small' color='primary' onClick={cancelRequest}>
-              Cancel
-            </Button>
+            <>
+              <Button size='small' color='primary' onClick={cancelRequest}>
+                Cancel
+              </Button>
+              <Button size='small' color='primary' onClick={startTrip}>
+                Start Trip
+              </Button>
+            </>
           )}
         </CardActions>
       </Card>

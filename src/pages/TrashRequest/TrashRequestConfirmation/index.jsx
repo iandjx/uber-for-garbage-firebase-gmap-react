@@ -2,11 +2,12 @@ import { Box, Button } from '@material-ui/core'
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useFirestore, useFirestoreConnect } from 'react-redux-firebase'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import Map from '../../../common/components/Map'
-import { useNavigate } from 'react-router-dom'
 
 const TrashRequestConfirmation = props => {
+  const { state } = useLocation()
   const [show, setShow] = useState(false)
   const firestore = useFirestore()
 
@@ -25,7 +26,7 @@ const TrashRequestConfirmation = props => {
     createdAt,
     photoUrl,
     status
-  } = props.location.state
+  } = state
 
   const handleCOnfirm = async () => {
     const newTrashRequest = {
@@ -48,6 +49,7 @@ const TrashRequestConfirmation = props => {
   }
   return (
     <Box style={{ display: 'grid' }}>
+      {console.log(state)}
       <Box style={{ gridArea: '1/1', height: '90%' }}>
         {lat ? (
           <Map

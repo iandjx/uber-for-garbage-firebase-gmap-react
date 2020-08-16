@@ -52,13 +52,15 @@ const NewTrashRequest = () => {
       status: 'pending'
     }
     console.log(newTrashRequest)
-    navigate('/disposer/request-confirmation', { ...newTrashRequest })
+    navigate('/disposer/request-confirmation', {
+      state: { ...newTrashRequest }
+    })
   }
 
   useEffect(() => {
     if (requests) {
       if (Object.keys(requests).length > 0) {
-        navigate('/disposer/active-request', requests)
+        navigate('/disposer/active-request', { state: { ...requests } })
       }
     }
   }, [requests])

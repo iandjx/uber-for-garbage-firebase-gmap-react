@@ -1,8 +1,10 @@
+import React, { useEffect } from 'react'
+
 import { List } from '@material-ui/core'
-import React from 'react'
 import TrashRequestItem from './TrashRequestItem'
 import haversine from 'haversine'
 import { useFirestoreConnect } from 'react-redux-firebase'
+import { useNavigate } from 'react-router-dom'
 import { usePosition } from 'use-position'
 import { useSelector } from 'react-redux'
 
@@ -10,6 +12,7 @@ const watch = true
 
 const TrashRequestList = props => {
   // const { uid } = props.location.state
+  const navigate = useNavigate()
   const { uid } = useSelector(state => state.firebase.auth)
   const { latitude, longitude } = usePosition(watch)
 
@@ -28,9 +31,25 @@ const TrashRequestList = props => {
     storeAs: 'activeRequests'
   })
 
-  const { availableRequests, activeRequests } = useSelector(
+  useFirestoreConnect({
+    collection: 'requests',
+    where: [
+      ['status', '==', 'onRoute'],
+      ['collectorId', '==', uid || null]
+    ],
+    storeAs: 'onRouteRequests'
+  })
+
+  const { availableRequests, activeRequests, onRouteRequests } = useSelector(
     state => state.firestore.data
   )
+  useEffect(() => {
+    if (onRouteRequests) {
+      navigate('/collector/on-route', {
+        state: { ...Object.values(onRouteRequests)[0] }
+      })
+    }
+  }, [onRouteRequests])
 
   const addHaversine = (location, request) => {
     const requestLocation = {

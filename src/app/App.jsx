@@ -17,6 +17,7 @@ import Dashboard from '../pages/Dashboard'
 import Header from '../common/components/Header'
 import ImagePreview from '../common/components/Camera/ImagePreview'
 import NewTrashRequest from '../pages/TrashRequest/NewTrashRequest'
+import OnRoutePickup from '../pages/Collector/OnRoutePickup'
 import PrivateRoute from '../common/components/PrivateComponent'
 import Register from '../pages/Auth/Register'
 import SideBar from '../common/components/SideBar'
@@ -36,7 +37,7 @@ const App = props => {
       navigate('/signin')
     }
     if (profile.userType === 'collector' && isLoaded(profile)) {
-      navigate('/collector', { uid: auth.uid })
+      navigate('/collector/request-list', { state: { uid: auth.uid } })
     }
     if (profile.userType === 'household' && isLoaded(profile)) {
       navigate('/disposer/new-request')
@@ -60,8 +61,11 @@ const App = props => {
           <PrivateRoute path='/image-preview' element={<ImagePreview />} />
         </Route>
         <Route path='/signin' element={<SignIn />} />
-        <Route path='/collector' element={<TrashRequestList />} />
-        <Route path='/test' element={<Test />} />
+        <Route path='/collector' element={<Dashboard />}>
+          <PrivateRoute path='/request-list' element={<TrashRequestList />} />
+          <PrivateRoute path='/on-route' element={<OnRoutePickup />} />
+        </Route>
+        {/* <PrivateRoute path='/collector' element={<TrashRequestList />} /> */}
       </Routes>
     </Box>
   )

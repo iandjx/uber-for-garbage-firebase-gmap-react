@@ -13,8 +13,10 @@ const SignIn = () => {
   useEffect(() => {
     if (isEmpty(profile) === false && 'userType' in profile === false) {
       navigate('/auth/register', {
-        auth: auth,
-        profile: profile
+        state: {
+          auth: auth,
+          profile: profile
+        }
       })
     }
     if (isEmpty(profile) === false && 'userType' in profile === true) {
