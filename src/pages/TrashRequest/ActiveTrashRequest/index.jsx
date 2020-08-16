@@ -11,7 +11,7 @@ const ActiveTrashRequest = props => {
   useFirestoreConnect({
     collection: 'requests',
     where: [
-      ['status', 'in', ['pending', 'active']],
+      ['status', 'in', ['pending', 'active', 'onRoute']],
       ['requesterId', '==', uid || '']
     ],
     storeAs: 'requests'
@@ -28,7 +28,9 @@ const ActiveTrashRequest = props => {
   return (
     <div>
       {console.log(currentRequest.status)}
-      {currentRequest.status === 'pending' ? <p>waiting</p> : <p>active</p>}
+      {currentRequest.status === 'pending' ? <p>waiting</p> : null}
+      {currentRequest.status === 'active' ? <p>waiting</p> : null}
+      {currentRequest.status === 'onRoute' ? <p>on the way</p> : null}
     </div>
   )
 }
