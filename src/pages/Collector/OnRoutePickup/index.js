@@ -5,10 +5,13 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { Button } from '@material-ui/core'
 import DirectionRenderer from '../../../common/components/GoogleMap/DirectionRenderer'
 import Map from '../../../common/components/GoogleMap'
+import { Modal } from '@material-ui/core'
 import { useFirestore } from 'react-redux-firebase'
 import { usePosition } from 'use-position'
 
 const OnRoutePickup = props => {
+  const [open, setOpen] = useState(false)
+
   const { state } = useLocation()
   const { lat, lng, requestId } = state
 
