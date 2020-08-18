@@ -1,11 +1,12 @@
+import { DirectionsRenderer, withScriptjs } from 'react-google-maps'
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { Button } from '@material-ui/core'
+import DirectionRenderer from '../../../common/components/GoogleMap/DirectionRenderer'
 import Map from '../../../common/components/GoogleMap'
 import { useFirestore } from 'react-redux-firebase'
 import { usePosition } from 'use-position'
-import { withScriptjs } from 'react-google-maps'
 
 const OnRoutePickup = props => {
   const { state } = useLocation()
@@ -18,7 +19,6 @@ const OnRoutePickup = props => {
   const { latitude, longitude } = usePosition(watch)
   const [latCoord, setLatCoord] = useState(null)
   const [lngCoord, setLngCoord] = useState(null)
-  const MapLoader = withScriptjs(Map)
 
   useEffect(() => {
     if (latitude !== undefined) {
@@ -68,15 +68,14 @@ const OnRoutePickup = props => {
       {console.log(state)}
 
       {latCoord && (
-        <MapLoader
-          googleMapURL='https://maps.googleapis.com/maps/api/js?key=AIzaSyCgByDvfp019eGSE-aUPBAbePU7e0MI0WU'
-          loadingElement={<div style={{ height: '100%' }} />}
-          origina={{ lat: latCoord, lng: lngCoord }}
-          destinationa={{ lat: lat, lng: lng }}
-          isMarkerOnly={false}
-          defaultLocation={{ lat: latCoord, lng: lngCoord }}
-          userLocation={{ lat: latCoord, lng: lngCoord }}
-        />
+        <Map defaultLat={latCoord} defaultLng={lngCoord}>
+          <DirectionsRenderer
+            originLat={latCoord}
+            originLng={lngCoord}
+            destinationLat={lat}
+            destinationLng={lng}
+          />
+        </Map>
       )}
       <Button onClick={cancelRequest}>Cancel Trash Request</Button>
       <Button onClick={requestComplete}>Trash Picked-Up</Button>

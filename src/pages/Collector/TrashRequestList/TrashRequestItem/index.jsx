@@ -11,7 +11,9 @@ import {
 import { useFirestore, useFirestoreConnect } from 'react-redux-firebase'
 
 import Alert from '@material-ui/lab/Alert'
+import DirectionRenderer from '../../../../common/components/GoogleMap/DirectionRenderer'
 import Map from '../../../../common/components/GoogleMap'
+import { Marker } from 'react-google-maps'
 import React from 'react'
 import haversine from 'haversine'
 import { useEffect } from 'react'
@@ -19,7 +21,6 @@ import { useNavigate } from 'react-router-dom'
 import { usePosition } from 'use-position'
 import { useSelector } from 'react-redux'
 import { useState } from 'react'
-import { withScriptjs } from 'react-google-maps'
 
 const TrashRequestItem = ({
   createdAt,
@@ -53,7 +54,6 @@ const TrashRequestItem = ({
   const firestore = useFirestore()
   const { uid } = useSelector(state => state.firebase.auth)
   const [mapOpen, setMapOpen] = useState(false)
-  const MapLoader = withScriptjs(Map)
   useFirestoreConnect({
     collection: 'users',
     doc: requesterId,
@@ -109,29 +109,20 @@ const TrashRequestItem = ({
             <Alert severity='warning'>Cannot access GPS coordinates</Alert>
           ))}
         {mapOpen && status === 'pending' && latCoord && lngCoord && (
-          <MapLoader
-            googleMapURL='https://maps.googleapis.com/maps/api/js?key=AIzaSyCgByDvfp019eGSE-aUPBAbePU7e0MI0WU'
-            loadingElement={<div style={{ height: `100%` }} />}
-            // origina={{ lat: 40.756795, lng: -73.954298 }}
-            // destinationa={{ lat: 41.756795, lng: -78.954298 }}
-            isMarkerOnly={true}
-            defaultLocation={{ lat: latCoord, lng: lngCoord }}
-            userLocation={{ lat: latCoord, lng: lngCoord }}
-            markerLocation={{ lat: lat, lng: lng }}
-          />
+          <Map>
+            <Marker position={{ lat: lat, lng: lng }} />
+          </Map>
         )}
 
         {mapOpen && status === 'active' && latCoord && lngCoord && (
-          <MapLoader
-            googleMapURL='https://maps.googleapis.com/maps/api/js?key=AIzaSyCgByDvfp019eGSE-aUPBAbePU7e0MI0WU'
-            loadingElement={<div style={{ height: `100%` }} />}
-            origina={{ lat: latCoord, lng: lngCoord }}
-            destinationa={{ lat: lat, lng: lng }}
-            isMarkerOnly={false}
-            defaultLocation={{ lat: latCoord, lng: lngCoord }}
-            userLocation={{ lat: latCoord, lng: lngCoord }}
-            // markerLocation={{ lat: lat, lng: lng }}
-          />
+          <Map>
+            <DirectionRenderer
+              originLat={latCoord}
+              originLng={lngCoord}
+              destinationLat={lat}
+              destinationLng={lng}
+            />
+          </Map>
         )}
         <CardActionArea onClick={toggleMap}>
           <CardContent>
