@@ -69,7 +69,7 @@ const OnRoutePickup = props => {
 
       {latCoord && (
         <Map defaultLat={latCoord} defaultLng={lngCoord}>
-          <DirectionsRenderer
+          <DirectionRenderer
             originLat={latCoord}
             originLng={lngCoord}
             destinationLat={lat}

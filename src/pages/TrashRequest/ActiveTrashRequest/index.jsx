@@ -1,5 +1,6 @@
+import DirectionsRenderer from '../../../common/components/GoogleMap/DirectionRenderer'
+import Map from '../../../common/components/GoogleMap'
 import React from 'react'
-import { current } from '@reduxjs/toolkit'
 import { useEffect } from 'react'
 import { useFirestoreConnect } from 'react-redux-firebase'
 import { useSelector } from 'react-redux'
@@ -27,10 +28,19 @@ const ActiveTrashRequest = props => {
 
   return (
     <div>
-      {console.log(currentRequest.status)}
+      {console.log(currentRequest)}
       {currentRequest.status === 'pending' ? <p>waiting</p> : null}
       {currentRequest.status === 'active' ? <p>waiting</p> : null}
-      {currentRequest.status === 'onRoute' ? <p>on the way</p> : null}
+      {currentRequest.status === 'onRoute' && (
+        <Map>
+          <DirectionsRenderer
+            originLat={currentRequest.collectorLat}
+            originLng={currentRequest.collectorLng}
+            destinationLat={currentRequest.lat}
+            destinationLng={currentRequest.lng}
+          />
+        </Map>
+      )}
     </div>
   )
 }
