@@ -32,6 +32,7 @@ const AppWrapper = styled.div`
 `;
 
 const App = (props) => {
+  // eslint-disable-next-line no-unused-vars
   const navigate = useNavigate();
   const { auth, profile } = useSelector((state) => state.firebase);
 
