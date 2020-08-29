@@ -19,6 +19,9 @@ import TrashRequestList from '../pages/Collector/TrashRequestList';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
+//pages
+import TemplatePage from '@Pages/Templates';
+
 const AppWrapper = styled.div`
   font-family: Montserrat;
   overflow: hidden;
@@ -63,6 +66,8 @@ const App = (props) => {
             <PrivateRoute path="/request-list" element={<TrashRequestList />} />
             <PrivateRoute path="/on-route" element={<OnRoutePickup />} />
           </Route>
+          <Route path="/test" element={<TemplatePage />} />
+
           {/* <PrivateRoute path='/collector' element={<TrashRequestList />} /> */}
         </Routes>
       </Box>
