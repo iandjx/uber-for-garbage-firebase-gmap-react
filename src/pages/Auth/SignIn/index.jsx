@@ -1,28 +1,29 @@
-import React, { useEffect } from 'react'
-import { isEmpty, isLoaded, useFirebase } from 'react-redux-firebase'
+import React, { useEffect } from 'react';
+import { isEmpty, isLoaded, useFirebase } from 'react-redux-firebase';
 
-import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
-import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const SignIn = () => {
-  const navigate = useNavigate()
-  const firebase = useFirebase()
-  const { auth, profile } = useSelector(state => state.firebase)
+  const navigate = useNavigate();
+  const firebase = useFirebase();
+  const { auth, profile } = useSelector((state) => state.firebase);
 
   useEffect(() => {
     if (isEmpty(profile) === false && 'userType' in profile === false) {
       navigate('/auth/register', {
         state: {
           auth: auth,
-          profile: profile
-        }
-      })
+          profile: profile,
+        },
+      });
     }
     if (isEmpty(profile) === false && 'userType' in profile === true) {
-      navigate('/')
+      navigate('/');
     }
-  }, [profile])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profile]);
 
   return (
     <div>
@@ -33,14 +34,14 @@ const SignIn = () => {
           signInOptions: [
             firebase.auth.GoogleAuthProvider.PROVIDER_ID,
             firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-            firebase.auth.PhoneAuthProvider.PROVIDER_ID
+            firebase.auth.PhoneAuthProvider.PROVIDER_ID,
           ],
           callbacks: {
             signInSuccessWithAuthResult: (authResult, redirectUrl) => {
-              firebase.handleRedirectResult(authResult).then(() => {})
-              return false
-            }
-          }
+              firebase.handleRedirectResult(authResult).then(() => {});
+              return false;
+            },
+          },
         }}
         firebaseAuth={firebase.auth()}
       />
@@ -58,7 +59,7 @@ const SignIn = () => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SignIn
+export default SignIn;

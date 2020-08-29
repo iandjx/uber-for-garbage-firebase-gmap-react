@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+      "baseUrl": ".",
+      "jsx": "react",
+      "paths": {
+        "@Components/*": ["./src/common/components/*"],
+        "@Themes/*": ["./src/common/themes/*"],
+        "@Assets/*": ["./src/common/assets/*"],
+        "@Pages/*": ["./src/pages/*"]
+      }
+    }
+  }
+  
