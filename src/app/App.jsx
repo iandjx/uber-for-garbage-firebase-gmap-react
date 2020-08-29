@@ -50,37 +50,35 @@ const App = (props) => {
 
   return (
     <AppWrapper>
-      <Box display="flex">
-        <Routes>
-          <Route path="/disposer" element={<Dashboard />}>
-            <PrivateRoute path="/new-request" element={<NewTrashRequest />} />
-            <PrivateRoute
-              path="request-confirmation"
-              element={<TrashRequestConfirmation />}
-            />
-            <PrivateRoute
-              path="/active-request"
-              element={<ActiveTrashRequest />}
-            />
-            <PrivateRoute path="/camera" element={<Camera />} />
-            <PrivateRoute path="/image-preview" element={<ImagePreview />} />
-          </Route>
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/collector" element={<Dashboard />}>
-            <PrivateRoute path="/request-list" element={<TrashRequestList />} />
-            <PrivateRoute path="/on-route" element={<OnRoutePickup />} />
-          </Route>
+      <Routes>
+        <Route path="/disposer" element={<Dashboard />}>
+          <PrivateRoute path="/new-request" element={<NewTrashRequest />} />
+          <PrivateRoute
+            path="request-confirmation"
+            element={<TrashRequestConfirmation />}
+          />
+          <PrivateRoute
+            path="/active-request"
+            element={<ActiveTrashRequest />}
+          />
+          <PrivateRoute path="/camera" element={<Camera />} />
+          <PrivateRoute path="/image-preview" element={<ImagePreview />} />
+        </Route>
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/collector" element={<Dashboard />}>
+          <PrivateRoute path="/request-list" element={<TrashRequestList />} />
+          <PrivateRoute path="/on-route" element={<OnRoutePickup />} />
+        </Route>
 
-          <Route path="/test" element={<TemplatePage />}>
-            <Route path="/" element={<Docs />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/sign-up" element={<SignUp />} />
-            <Route path="/disposer" element={<Disposer />} />
-          </Route>
+        <Route path="/test" element={<TemplatePage />}>
+          <Route path="/" element={<Docs />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/disposer" element={<Disposer />} />
+        </Route>
 
-          {/* <PrivateRoute path='/collector' element={<TrashRequestList />} /> */}
-        </Routes>
-      </Box>
+        {/* <PrivateRoute path='/collector' element={<TrashRequestList />} /> */}
+      </Routes>
     </AppWrapper>
   );
 };

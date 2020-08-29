@@ -1,17 +1,19 @@
-import React from "react";
-import styled from "styled-components";
-import { useNavigate } from "react-router";
+import React from 'react';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router';
 
 //import components
-import Block from "@Components/Block";
-import Logo from "@Components/Logo";
-import HeadingText from "@Components/Heading-text";
-import FormInput from "@Components/Form-Input";
-import Button from "@Components/Button";
-import HeightSpacer from "@Components/Height-Spacer";
-import Section from "@Components/Section";
-import LinkWrapper from "@Components/Link-Wrapper";
-import Text from "@Components/Text";
+import Block from '@Components/Block';
+import Logo from '@Components/Logo';
+import HeadingText from '@Components/Heading-text';
+import FormInput from '@Components/Form-Input';
+import Button from '@Components/Button';
+import HeightSpacer from '@Components/Height-Spacer';
+import Section from '@Components/Section';
+import LinkWrapper from '@Components/Link-Wrapper';
+import Text from '@Components/Text';
+
+const signUpLink = '/test/sign-up';
 
 const Wrapper = styled.div`
   display: flex;
@@ -42,8 +44,8 @@ const Login = () => {
           <FormInput type="email" label="Email/Phone Number"></FormInput>
           <FormInput type="password" label="Password"></FormInput>
           <Text fontSize={15}>
-            Don't have an Account?{" "}
-            <LinkWrapper onClick={(e) => navigate("/sign-up")}>
+            Don't have an Account?{' '}
+            <LinkWrapper onClick={(e) => navigate(signUpLink)}>
               Sign Up
             </LinkWrapper>
           </Text>
