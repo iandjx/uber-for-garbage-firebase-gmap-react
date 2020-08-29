@@ -36,15 +36,15 @@ const App = (props) => {
   const { auth, profile } = useSelector((state) => state.firebase);
 
   useEffect(() => {
-    if (isEmpty(auth) && isLoaded(auth)) {
-      navigate('/signin');
-    }
-    if (profile.userType === 'collector' && isLoaded(profile)) {
-      navigate('/collector/request-list', { state: { uid: auth.uid } });
-    }
-    if (profile.userType === 'household' && isLoaded(profile)) {
-      navigate('/disposer/new-request');
-    }
+    // if (isEmpty(auth) && isLoaded(auth)) {
+    //   navigate('/signin');
+    // }
+    // if (profile.userType === 'collector' && isLoaded(profile)) {
+    //   navigate('/collector/request-list', { state: { uid: auth.uid } });
+    // }
+    // if (profile.userType === 'household' && isLoaded(profile)) {
+    //   navigate('/disposer/new-request');
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth, profile]);
 
