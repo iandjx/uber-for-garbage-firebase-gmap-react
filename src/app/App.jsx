@@ -21,6 +21,10 @@ import styled from 'styled-components';
 
 //pages
 import TemplatePage from '@Pages/Templates';
+import Docs from '@Pages/Templates/docs';
+import Disposer from '@Pages/Templates/disposer';
+import SignUp from '@Pages/Templates/sign-up';
+import Login from '@Pages/Templates/login';
 
 const AppWrapper = styled.div`
   font-family: Montserrat;
@@ -66,7 +70,13 @@ const App = (props) => {
             <PrivateRoute path="/request-list" element={<TrashRequestList />} />
             <PrivateRoute path="/on-route" element={<OnRoutePickup />} />
           </Route>
-          <Route path="/test" element={<TemplatePage />} />
+
+          <Route path="/test" element={<TemplatePage />}>
+            <Route path="/" element={<Docs />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/sign-up" element={<SignUp />} />
+            <Route path="/disposer" element={<Disposer />} />
+          </Route>
 
           {/* <PrivateRoute path='/collector' element={<TrashRequestList />} /> */}
         </Routes>
